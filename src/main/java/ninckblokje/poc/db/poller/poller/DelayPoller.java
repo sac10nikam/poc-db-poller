@@ -8,8 +8,6 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
 
 @Component
 @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -34,9 +32,5 @@ public class DelayPoller {
 
         log.info("Done polling next 10 records");
         return records;
-    }
-
-    public Future<List<PollRecord>> doPoll() {
-        return CompletableFuture.supplyAsync(() -> getNextPollCycle());
     }
 }

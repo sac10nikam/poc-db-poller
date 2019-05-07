@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
@@ -43,8 +44,8 @@ public class PocDbPollerApplicationTests {
     public void testPollLocking() throws ExecutionException, InterruptedException {
         assertThat(repository.countByValueIsNotNull().longValue(), is(20L));
 
-        Future<List<PollRecord>> f1 = poller.doPoll();
-        Future<List<PollRecord>> f2 = poller.doPoll();
+        Future<List<PollRecord>> f1 = doPoll();
+        Future<List<PollRecord>> f2 = doPoll();
 
         List<Long> foundIds = new ArrayList<>();
 
@@ -66,4 +67,7 @@ public class PocDbPollerApplicationTests {
         assertThat(duplicateIds.isEmpty(), is(true));
     }
 
+    Future<List<PollRecord>> doPoll() {
+        return CompletableFuture.supplyAsync(() -> poller.getNextPollCycle());
+    }
 }
