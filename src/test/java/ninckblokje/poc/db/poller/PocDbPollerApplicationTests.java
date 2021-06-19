@@ -3,13 +3,11 @@ package ninckblokje.poc.db.poller;
 import ninckblokje.poc.db.poller.entity.PollRecord;
 import ninckblokje.poc.db.poller.poller.DelayPoller;
 import ninckblokje.poc.db.poller.repository.PollerRepository;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -21,9 +19,8 @@ import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
+import static org.hamcrest.MatcherAssert.assertThat;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
 public class PocDbPollerApplicationTests {
 
@@ -32,10 +29,10 @@ public class PocDbPollerApplicationTests {
     @Autowired
     private PollerRepository repository;
 
-    @Before
+    @BeforeEach
     @Rollback(false)
     public void before() {
-        for(int i=0;i<20;i++) {
+        for (int i = 0; i < 20; i++) {
             repository.save(PollRecord.builder().value(UUID.randomUUID().toString()).build());
         }
     }
